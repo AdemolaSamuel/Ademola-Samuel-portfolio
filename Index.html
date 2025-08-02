@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dynamic Portfolio</title>
+    <!-- Use the Inter font, a modern and clean choice -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
+    <!-- Load Tailwind CSS from CDN for a robust and responsive utility-first framework -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define a custom color palette using CSS variables for easy customization */
+        :root {
+            --primary-color: #5B21B6;   /* Deep Purple */
+            --secondary-color: #BE185D; /* Dark Pink */
+            --accent-color: #059669;    /* Emerald Green */
+            --background-color: #111827;/* Dark Slate */
+            --text-color: #E5E7EB;      /* Light Gray */
+            --card-bg-color: rgba(255, 255, 255, 0.05); /* Transparent white for cards */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        /* --- Page Transition Styles --- */
+        /* Each 'page' section is positioned absolutely to stack on top of each other */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* The transition property for a smooth slide effect */
+            transition: transform 1s cubic-bezier(0.86, 0, 0.07, 1);
+            transform: translateX(100%);
+            display: none;
+            overflow-y: auto; /* Enables scrolling within each section */
+        }
+        
+        /* 'active' class slides the page into view */
+        .page.active {
+            transform: translateX(0);
+            display: block;
+        }
+
+        /* 'slide-out' class moves the page off-screen to the left */
+        .page.slide-out {
+            transform: translateX(-100%);
+        }
+        
+        /* Keyframe animation for a subtle glow on the active nav link */
+        @keyframes glowing {
+            0% { box-shadow: 0 0 5px var(--accent-color); }
+            50% { box-shadow: 0 0 20px var(--accent-color); }
+            100% { box-shadow: 0 0 5px var(--accent-color); }
+        }
+
+        /* Style for the active navigation link with a bottom border and the glowing animation */
+        .nav-link.active-link {
+            border-bottom: 2px solid var(--accent-color);
+            animation: glowing 1.5s infinite;
+        }
+
+        /* --- Fading Background Animations for Parallax Effect --- */
+        /* Animation keyframes for fading images in and out */
+        @keyframes background-fade {
+            0%, 100% { opacity: 0; } /* Start and end with opacity 0 */
+            20% { opacity: 1; }      /* Fade in to full opacity */
+            80% { opacity: 1; }      /* Hold full opacity */
+        }
+        
+        /* Base styles for all fading background layers */
+        .fading-bg-layer {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0; /* All layers start as hidden */
+            z-index: 0;
+            animation: background-fade 30s infinite; /* 30s cycle for each image */
+        }
+
+        /* Individual layers with different images and animation delays for a cross-fade effect */
+        .fading-bg-layer.layer-1 {
+            background-image: url('./images/img 01.png');
+            animation-delay: 0s;
+        }
+
+        .fading-bg-layer.layer-2 {
+            background-image: url('./images/img 02.jpg');
+            animation-delay: 10s;
+        }
+
+        .fading-bg-layer.layer-3 {
+            background-image: url('./images/img 01.png');
+            animation-delay: 20s;
+        }
+
+    </style>
+</head>
+<body class="overflow-hidden">
+
+    <!-- Main container to hold all pages and prevent overflow -->
+    <div class="relative w-full h-screen overflow-hidden">
+
+        <!-- Navigation Menu - Fixed at the top for easy access -->
+        <nav class="fixed top-0 left-0 w-full z-20 bg-gray-900 bg-opacity-70 backdrop-blur-sm shadow-xl p-4 md:p-6">
+            <div class="container mx-auto flex flex-wrap justify-center space-x-4 md:space-x-8">
+                <a href="#home" class="nav-link text-white font-bold text-base md:text-xl p-2 md:p-3 rounded-lg hover:bg-gray-700 transition-colors duration-300">Home</a>
+                <a href="#about" class="nav-link text-white font-bold text-base md:text-xl p-2 md:p-3 rounded-lg hover:bg-gray-700 transition-colors duration-300">About</a>
+                <a href="#portfolio" class="nav-link text-white font-bold text-base md:text-xl p-2 md:p-3 rounded-lg hover:bg-gray-700 transition-colors duration-300">Portfolio</a>
+                <a href="#contact" class="nav-link text-white font-bold text-base md:text-xl p-2 md:p-3 rounded-lg hover:bg-gray-700 transition-colors duration-300">Contact</a>
+            </div>
+        </nav>
+
+        <!-- --- Home Section --- -->
+        <!-- This is the first page to be shown and starts with the 'active' class -->
+        <div id="home" class="page active p-8 md:p-16 flex items-center justify-center relative">
+            
+            <!-- Three layered background elements for the fading animation -->
+            <div class="fading-bg-layer layer-1"></div>
+            <div class="fading-bg-layer layer-2"></div>
+            <div class="fading-bg-layer layer-3"></div>
+            
+            <!-- An overlay to ensure text is readable on top of the images -->
+            <div class="absolute inset-0 bg-black opacity-40 z-[3]"></div>
+
+            <!-- Main content container - now with a higher z-index -->
+            <div class="relative z-[4] flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12">
+                <!-- Profile Card -->
+                <div class="bg-card-bg-color p-8 rounded-3xl shadow-2xl backdrop-blur-md text-center transform transition-transform duration-300 hover:scale-105">
+                    <img src="./images/img 01.png" alt="Profile Picture" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-lg">
+                    <h3 class="text-3xl font-bold text-white mb-2">Derek</h3>
+                    <p class="text-lg text-gray-300">Creative Developer & Designer</p>
+                </div>
+                <!-- Main Text Content -->
+                <div class="text-center p-6 md:p-12 bg-white bg-opacity-10 rounded-3xl shadow-2xl backdrop-blur-md">
+                    <h1 class="text-4xl md:text-7xl font-bold text-white mb-4 md:mb-6 animate-pulse">Hello, I'm [DEREK]</h1>
+                    <p class="text-lg md:text-3xl text-gray-200 font-light">A Creative Front end Developer & UI/UX Enthusiast</p>
+                    <a href="#portfolio" class="nav-link inline-block mt-8 text-xl md:text-2xl font-semibold text-white bg-accent-color hover:bg-green-700 py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg">View My Work</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- --- About Section --- -->
+        <div id="about" class="page bg-gradient-to-r from-accent-color to-primary-color p-8 md:p-16 flex items-center justify-center">
+            <div class="max-w-4xl text-center p-6 md:p-12 bg-white bg-opacity-10 rounded-3xl shadow-2xl backdrop-blur-md">
+                <h2 class="text-4xl md:text-6xl font-bold text-white mb-6">About Me</h2>
+                <p class="text-base md:text-lg text-gray-200 leading-relaxed mb-8">
+                    My name is Derek. I am a professional Front-End Web Developer with strong proficiency in HTML, CSS, and JavaScript, creating responsive and visually engaging user interfaces. In addition to my technical skills, I am also a passionate musician. I play multiple instruments, including the keyboard, guitar, and drums, and I am an experienced singer. My unique blend of creativity and technical expertise allows me to approach projects with both precision and artistry, delivering high-quality results in both web development and music.
+
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-card-bg-color rounded-2xl p-6 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h3 class="text-2xl font-semibold mb-2 text-white">Skills & Tools</h3>
+                        <ul class="list-disc list-inside text-left text-gray-300 space-y-1">
+                            <li>HTML5, CSS3, JavaScript (ES6+)</li>
+                            <li>React.js, Node.js, Express.js</li>
+                            <li>Tailwind CSS, SASS</li>
+                            <li>Figma, Adobe XD</li>
+                        </ul>
+                    </div>
+                    <div class="bg-card-bg-color rounded-2xl p-6 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <h3 class="text-2xl font-semibold mb-2 text-white">Experience</h3>
+                        <p class="text-left text-gray-300">
+                            Over 5 years of experience in front-end development, working on projects ranging from simple landing pages to complex web applications for various industries.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- --- Portfolio Section --- -->
+        <div id="portfolio" class="page bg-gradient-to-r from-secondary-color to-accent-color p-8 md:p-16">
+            <div class="max-w-7xl mx-auto p-6 md:p-12 bg-white bg-opacity-10 rounded-3xl shadow-2xl backdrop-blur-md">
+                <h2 class="text-4xl md:text-6xl font-bold text-white text-center mb-10">Featured Projects</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Project Card 1 -->
+                    <div class="bg-card-bg-color rounded-2xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="./images/close-up-man-shopping-with-laptop.jpg" alt="Project 1" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">E-commerce Platform</h3>
+                            <p class="text-gray-300">A modern, responsive e-commerce site built with React and a focus on user experience.</p>
+                            <a href="#" class="inline-block mt-4 text-sm font-semibold text-white bg-primary-color hover:bg-purple-800 py-2 px-4 rounded-full transition-colors duration-300">Learn More</a>
+                        </div>
+                    </div>
+                    <!-- Project Card 2 -->
+                    <div class="bg-card-bg-color rounded-2xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="./images/top-view-smartphone-desk-with-coffee-cup-notebook.jpg" alt="Project 2" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">Mobile Task App</h3>
+                            <p class="text-gray-300">A sleek and intuitive mobile-first application for managing daily tasks and goals.</p>
+                            <a href="#" class="inline-block mt-4 text-sm font-semibold text-white bg-secondary-color hover:bg-pink-700 py-2 px-4 rounded-full transition-colors duration-300">Learn More</a>
+                        </div>
+                    </div>
+                    <!-- Project Card 3 -->
+                    <div class="bg-card-bg-color rounded-2xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="./images/woman-looking-sales-statistics-computer-taking-notes.jpg" alt="Project 3" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">Data Visualization Dashboard</h3>
+                            <p class="text-gray-300">An interactive dashboard to visualize complex data sets with dynamic charts and graphs.</p>
+                            <a href="#" class="inline-block mt-4 text-sm font-semibold text-white bg-accent-color hover:bg-green-700 py-2 px-4 rounded-full transition-colors duration-300">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- --- Contact Section --- -->
+        <div id="contact" class="page bg-gradient-to-r from-primary-color to-accent-color p-8 md:p-16 flex items-center justify-center">
+            <div class="max-w-xl w-full text-center p-6 md:p-12 bg-white bg-opacity-10 rounded-3xl shadow-2xl backdrop-blur-md">
+                <h2 class="text-4xl md:text-6xl font-bold text-white mb-6">Get in Touch</h2>
+                <p class="text-base md:text-lg text-gray-200 mb-8">Let's build something amazing together!</p>
+                
+                <form class="space-y-6">
+                    <input type="text" placeholder="Derek" class="w-full p-4 bg-gray-800 border-2 border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-accent-color transition-colors duration-300">
+                    <input type="email" placeholder="somebody@gmail.com" class="w-full p-4 bg-gray-800 border-2 border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-accent-color transition-colors duration-300">
+                    <textarea placeholder="Your Message" rows="5" class="w-full p-4 bg-gray-800 border-2 border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-accent-color transition-colors duration-300"></textarea>
+                    <button type="submit" class="w-full p-4 bg-secondary-color text-white font-bold rounded-xl text-lg hover:bg-pink-700 transition-colors duration-300">Send Message</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for page transitions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select all navigation links and all page sections
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+            
+            // Keep track of the currently visible page
+            let currentPageId = 'home';
+            
+            // This function adds a glowing border to the active navigation link
+            const setActiveNavLink = (activeId) => {
+                navLinks.forEach(link => {
+                    link.classList.remove('active-link'); // Remove the active class from all links
+                    if (link.getAttribute('href').substring(1) === activeId) {
+                        link.classList.add('active-link'); // Add the active class to the current link
+                    }
+                });
+            };
+
+            // Set the initial active link when the page loads
+            setActiveNavLink(currentPageId);
+            
+            // Add a click event listener to each navigation link
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent the default anchor link behavior
+                    
+                    // Get the ID of the page we want to navigate to
+                    const targetPageId = e.target.getAttribute('href').substring(1);
+                    
+                    // If the user clicks the link for the page they're already on, do nothing
+                    if (targetPageId === currentPageId) {
+                        return;
+                    }
+                    
+                    // Find the current and target page elements
+                    const currentPage = document.getElementById(currentPageId);
+                    const targetPage = document.getElementById(targetPageId);
+                    
+                    // Start the slide-out transition for the current page by adding the 'slide-out' class
+                    currentPage.classList.add('slide-out');
+                    
+                    // Wait for the transition to finish before showing the new page.
+                    // The delay (700ms) must match the CSS transition duration for a seamless effect.
+                    setTimeout(() => {
+                        // Hide the old page and remove the slide-out class
+                        currentPage.classList.remove('active');
+                        currentPage.classList.remove('slide-out');
+                        
+                        // Make the new page visible by adding the 'active' class
+                        targetPage.classList.add('active');
+                        
+                        // Update the current page ID and the active navigation link
+                        currentPageId = targetPageId;
+                        setActiveNavLink(currentPageId);
+                    }, 700);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
